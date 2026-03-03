@@ -5,13 +5,16 @@
  */
 var mergeAlternately = function (word1, word2) {
     let result = '';
-    const length = Math.max(word1.length, word2.length);
+    const nMin = Math.min(word1.length, word2.length);
 
-    for (let i = 0; i < length; i++) {
-        // Checking for truthiness handles characters and undefined
-        if (word1[i]) result += word1[i];
-        if (word2[i]) result += word2[i];
+    // Merge overlapping parts
+    for (let i = 0; i < nMin; i++) {
+        result += word1[i] + word2[i];
     }
+
+    // Append remaining tails (one will be empty)
+    result += word1.substring(nMin);
+    result += word2.substring(nMin);
 
     return result;
 };
