@@ -36,23 +36,19 @@ Acceptance Rate
 46.8%
 """
 
-# submittion: https://leetcode.com/problems/find-closest-number-to-zero/solutions/6341832/python-intuitive-solution-by-dvlsfdxunt-qlh8
-
+# submittion: https://leetcode.com/problems/find-closest-number-to-zero/solutions/7622158/python-solution-without-abs-by-dvlsfdxun-mxro/
 
 class Solution:
     def findClosestNumber(self, nums: list[int]) -> int:
-        closest_to_zero = nums[0]
-        for num in nums[1:]:
-            if num == 0:
-                closest_to_zero = num
-                break
-            elif abs(num) < abs(closest_to_zero):
-                closest_to_zero = num
-                next
-            elif abs(num) == abs(closest_to_zero):
-                closest_to_zero = max(num, closest_to_zero)
-        return closest_to_zero
-
-
-solution = Solution()
-print(solution.findClosestNumber(nums=[1, 2, 3, 4, -2, -1, 0]))
+        closest = nums[0]
+        for x in nums[1:]:
+            # Distance withoutu abs()
+            x_distance = x if x >= 0 else -x
+            closest_distance = closest if closest >= 0 else -closest
+            # look for the lesser value
+            if x_distance < closest_distance:
+                closest = x
+            # Look for same distance but int positive
+            elif x_distance == closest_distance and x > closest:
+                closest = x
+        return closest
