@@ -24,31 +24,27 @@ s and t consist only of lowercase English letters.
 Follow up: Suppose there are lots of incoming s, say s1, s2, ..., sk where k >= 109, and you want to check one by one to see if t has its subsequence. In this scenario, how would you change your code? """
 
 # len s <= len t
-
-
 class Solution:
     def isSubsequence(self, s: str, t: str) -> bool:
-        if len(s) == 0 or (len(s) == 0 and len(t) == 0):
+        if len(s) == 0:
             return True
-        if len(s) > len(t) or len(t) == 0:
+        elif len(t) < len(s):
             return False
-        i = 0
-        j = 0
-        t_sublist = []
-        while i < len(t) and j < len(s):
-            if t[i] == s[j]:
-                t_sublist.append(t[i])
+        i = 0 # iteration for s letters
+        for t_char in t:
+            if s[i] == t_char:
                 i += 1
-                j += 1   
-            else:
-                i += 1
-        if s == ''.join(t_sublist):
-            return True
-        else:
-            return False
+            if i == len(s):
+                return True
+        return False
+""" 
+    Gemini pythonic solution
+    
+    class Solution:
+    def isSubsequence(self, s: str, t: str) -> bool:
+        it = iter(t)
+        return all(c in it for c in s)
+"""
 
-solution = Solution()
-print(solution.isSubsequence(s='axc', t='ahbgdc'))
 
-                
 
