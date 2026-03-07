@@ -28,95 +28,34 @@ Constraints:
 1 <= prices.length <= 105
 0 <= prices[i] <= 104 """
 
-from typing import List
-
+# my solution
 class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        min, max, profit, last_value = 0, 0, 0, prices[0]
-        for i in range(len(prices)):
-            if prices[i] > last_value:
-                max = i
-                if min < max and (prices[max] - prices[min]) > profit:
-                    profit = prices[max] - prices[min]
-            elif prices[i] < prices[min]:
-                min = i
-            last_value = prices[i]  
-        return profit
-    # def maxProfit(self, prices: List[int]) -> int:
-    #     min = 0
-    #     for i in range(len(prices)):
-    #         for j in range(i+1,len(prices)):
-    #             if prices[i] < prices[j] and prices[i] - prices[j] < min:
-    #                 min = prices[i] - prices[j]
-    #     return abs(min)
-
-#-----------------------------COMPLEXITY ANALYSIS--------------------------------
-
-import time
-import random
-import matplotlib.pyplot as plt
-
-class Solution:
-    def maxProfit(self, prices):
-        min_value = prices[0]
-        profit = 0
+    def maxProfit(self, prices: list[int]) -> int:
+        min = prices[0]
+        max = prices[0]
+        max_profit = 0
         for value in prices:
-            if value > min_value:
-                if value - min_value > profit:
-                    profit = value - min_value
-            elif value < min_value:
-                min_value = value
-        return profit
+            if value < min:
+                min, max = value, value
+                continue
+            if value > max:
+                max = value
+                profit = max - min
+                if profit > max_profit:
+                    max_profit = profit
+        return max_profit
 
-# Function to measure time taken for different input sizes
-def measure_time(n):
-    prices = [random.randint(0, 10**4) for _ in range(n)]  # Generate random prices
-    solution = Solution()
-    start_time = time.time()
-    solution.maxProfit(prices)
-    return time.time() - start_time  # Execution time in seconds
+# more pythonic solution by gpt-5.3-codex, same time and space complexity O(n) time O(1) space
 
-# Test different input sizes
-input_sizes = [10**3, 10**4, 10**5, 10**6]
-execution_times = [measure_time(n) for n in input_sizes]
+class Solution2:
+    def maxProfit(self, prices: list[int]) -> int:
+        min_price = prices[0]
+        best_profit = 0
 
-# Plot results
-plt.figure(figsize=(8, 5))
-plt.plot(input_sizes, execution_times, marker='o', linestyle='-', color='b', label="Execution Time")
-plt.xlabel("Input Size (n)")
-plt.ylabel("Execution Time (seconds)")
-plt.title("Time Complexity Analysis of maxProfit()")
-plt.grid(True)
-plt.legend()
-plt.show()
+        for price in prices[1:]:
+            best_profit = max(best_profit, price - min_price)
+            min_price = min(min_price, price)
+
+        return best_profit
 
 
-#--------------------------------------- SPACE ---------------------------------------------------
-
-import sys
-import numpy as np
-
-# Function to measure memory usage for different input sizes
-def measure_memory(n):
-    prices = [random.randint(0, 10**4) for _ in range(n)]  # Generate random prices
-    solution = Solution()
-    
-    # Measure memory usage of key variables
-    prices_size = sys.getsizeof(prices) + sum(sys.getsizeof(x) for x in prices)  # List + elements
-    solution_size = sys.getsizeof(solution)  # Object instance
-    total_memory = prices_size + solution_size
-    
-    return total_memory / 1024  # Convert to KB
-
-# Test different input sizes
-memory_usage = [measure_memory(n) for n in input_sizes]
-
-# Plot results
-plt.figure(figsize=(8, 5))
-plt.plot(input_sizes, memory_usage, marker='o', linestyle='-', color='r', label="Memory Usage")
-plt.xlabel("Input Size (n)")
-plt.ylabel("Memory Usage (KB)")
-plt.title("Space Complexity Analysis of maxProfit()")
-plt.grid(True)
-plt.legend()
-plt.show()
